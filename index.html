@@ -1,41 +1,180 @@
-  CASE
-        WHEN COUNT(t."Request Id") <
-             (
-                SELECT AVG(x.m_cnt)
-                FROM (
-                    SELECT COUNT(pm."Request Id") AS m_cnt
-                    FROM "table a" pm
-                    WHERE
-                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -1, GETDATE())) AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -1, GETDATE())))
-                        OR (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -2, GETDATE())) AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -2, GETDATE())))
-                        OR (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -3, GETDATE())) AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -3, GETDATE())))
-                    GROUP BY YEAR(pm."Created Time"), MONTH(pm."Created Time")
-                ) x
-             )
-        THEN 'RED'
-        ELSE 'OK'
-    END AS "Tickets_Flag"
-    
-    
-     CASE
-        WHEN COUNT(t."Request Id") <
-             (
-                SELECT AVG(x.m_cnt)
-                FROM (
-                    SELECT COUNT(pm."Request Id") AS m_cnt
-                    FROM "qTech" pm
-                    WHERE
-                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -1, GETDATE()))
-                         AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -1, GETDATE())) AND pm."ValidEmailTicketStatus" = 'Valid Email Tickets')
-                        OR
-                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -2, GETDATE()))
-                         AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -2, GETDATE()))AND pm."ValidEmailTicketStatus" = 'Valid Email Tickets')
-                        OR
-                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -3, GETDATE()))
-                         AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -3, GETDATE()))AND pm."ValidEmailTicketStatus" = 'Valid Email Tickets')
-                    GROUP BY YEAR(pm."Created Time"), MONTH(pm."Created Time")
-                ) x
-          )
-        THEN 'RED'
-        ELSE 'OK'
-    END AS "Tickets_Flag"
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sunday Match Availability</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background:#f6f7fb; color:#111; }
+    .wrap { max-width: 720px; margin: 28px auto; padding: 0 16px; }
+    .card { background:#fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 18px rgba(0,0,0,.07); }
+    .tabs { display:flex; gap:10px; margin-bottom: 12px; }
+    .tabbtn {
+      border: 0; padding: 10px 14px; border-radius: 10px; cursor:pointer;
+      background:#e9ecf7; font-weight: 600;
+    }
+    .tabbtn.active { background:#2f5cff; color:#fff; }
+    h1 { font-size: 18px; margin: 0 0 14px; }
+    .q { font-size: 16px; font-weight: 700; margin: 12px 0 10px; }
+    .options { display:flex; gap:12px; flex-wrap: wrap; }
+    .btn {
+      border: 0; padding: 10px 14px; border-radius: 10px; cursor:pointer;
+      background:#111; color:#fff; font-weight:700;
+    }
+    .btn.secondary { background:#666; }
+    .msg { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background:#f1f5ff; }
+    .small { font-size: 12px; color:#666; margin-top: 10px; }
+    table { width:100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border-bottom: 1px solid #eee; padding: 10px 8px; text-align:left; }
+    th { background:#fafafa; font-size: 13px; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+    .danger { background:#ffefef; }
+    .linkbtn {
+      display:inline-block; margin-top: 10px; padding: 10px 14px; border-radius: 10px;
+      background:#2f5cff; color:#fff; text-decoration:none; font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="tabs">
+      <button class="tabbtn active" id="tabVote" onclick="showTab('vote')">Vote</button>
+      <button class="tabbtn" id="tabResults" onclick="showTab('results')">Results</button>
+    </div>
+
+    <div class="card" id="viewVote">
+      <h1>Sunday Match Poll</h1>
+      <div class="q">Q: Available for Sunday Match?</div>
+
+      <div class="options">
+        <button class="btn" onclick="vote('YES')">Yes</button>
+        <button class="btn secondary" onclick="vote('NO')">No</button>
+      </div>
+
+      <div id="message" class="msg" style="display:none;"></div>
+
+      <div class="small">
+        Note: Payment redirect uses a UPI deep link (works best on mobile with GPay/UPI apps installed).
+      </div>
+    </div>
+
+    <div class="card" id="viewResults" style="display:none;">
+      <h1>Results</h1>
+
+      <div class="row">
+        <button class="btn secondary" onclick="refreshResults()">Refresh</button>
+        <button class="btn secondary" onclick="resetLocalResults()">Reset (this device)</button>
+      </div>
+
+      <div id="summary" class="msg" style="margin-top:12px;"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Choice</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="logBody"></tbody>
+      </table>
+
+      <div class="small danger msg">
+        This “Results” tab shows votes saved only in this browser/device (localStorage).  
+        If you want to collect votes from all users in one place, you need a backend (Google Sheet / Firebase / server).
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "sunday_match_votes_v1";
+
+    function showTab(which) {
+      const isVote = which === "vote";
+      document.getElementById("viewVote").style.display = isVote ? "block" : "none";
+      document.getElementById("viewResults").style.display = isVote ? "none" : "block";
+
+      document.getElementById("tabVote").classList.toggle("active", isVote);
+      document.getElementById("tabResults").classList.toggle("active", !isVote);
+
+      if (!isVote) refreshResults();
+    }
+
+    function getVotes() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveVotes(votes) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+    }
+
+    function vote(choice) {
+      const votes = getVotes();
+      votes.push({ choice, ts: new Date().toISOString() });
+      saveVotes(votes);
+
+      const msg = document.getElementById("message");
+      msg.style.display = "block";
+
+      if (choice === "NO") {
+        msg.textContent = "You saved your 100 Rupees";
+        return;
+      }
+
+      // YES -> Redirect to GPay/UPI payment link for ₹100 to mutharasu93@okaxis
+      // This is a standard UPI deep link. On mobile, it usually opens the chosen UPI app.
+      const upiId = "mutharasu93@okaxis";
+      const amount = "100";
+      const payeeName = "Sunday Match";
+      const note = "Sunday Match Fee";
+
+      const upiUrl =
+        "upi://pay" +
+        "?pa=" + encodeURIComponent(upiId) +
+        "&pn=" + encodeURIComponent(payeeName) +
+        "&am=" + encodeURIComponent(amount) +
+        "&cu=INR" +
+        "&tn=" + encodeURIComponent(note);
+
+      msg.innerHTML = "Redirecting to payment… If it doesn’t open, tap: <br>" +
+                      `<a class="linkbtn" href="${upiUrl}">Pay ₹100 via UPI</a>`;
+
+      // Try redirect
+      setTimeout(() => { window.location.href = upiUrl; }, 500);
+    }
+
+    function refreshResults() {
+      const votes = getVotes();
+      const yesCount = votes.filter(v => v.choice === "YES").length;
+      const noCount  = votes.filter(v => v.choice === "NO").length;
+
+      document.getElementById("summary").innerHTML =
+        `<b>Total:</b> ${votes.length} &nbsp; | &nbsp; <b>Yes:</b> ${yesCount} &nbsp; | &nbsp; <b>No:</b> ${noCount}`;
+
+      const tbody = document.getElementById("logBody");
+      tbody.innerHTML = "";
+
+      votes.slice().reverse().forEach((v, idx) => {
+        const tr = document.createElement("tr");
+        const dt = new Date(v.ts);
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><b>${v.choice}</b></td>
+          <td>${dt.toLocaleString()}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function resetLocalResults() {
+      localStorage.removeItem(STORAGE_KEY);
+      refreshResults();
+      alert("Local results cleared for this device/browser.");
+    }
+  </script>
+</body>
+</html>
