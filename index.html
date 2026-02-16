@@ -7,32 +7,28 @@
   <style>
     :root{
       --bg:#0b1020;
-      --card: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.12);
       --text:#eef2ff;
       --muted: rgba(238,242,255,.75);
+      --card: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.14);
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
       --accent:#6ea8ff;
       --good:#26d07c;
       --bad:#ff5b5b;
       --warn:#ffcc66;
-      --border: rgba(255,255,255,.14);
-      --shadow: 0 18px 55px rgba(0,0,0,.45);
     }
-
     *{box-sizing:border-box}
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--text);
+      min-height:100vh;
       background: radial-gradient(1200px 600px at 20% 0%, rgba(110,168,255,.25), transparent 60%),
                   radial-gradient(900px 500px at 90% 10%, rgba(38,208,124,.14), transparent 55%),
                   radial-gradient(900px 500px at 60% 100%, rgba(255,204,102,.12), transparent 50%),
                   var(--bg);
-      color: var(--text);
-      min-height:100vh;
-      position: relative;
       overflow-x:hidden;
     }
-
-    /* Watermark background text */
     body::before{
       content:"KMS WARRIORS CC  •  KMS WARRIORS CC  •  KMS WARRIORS CC";
       position: fixed;
@@ -49,27 +45,10 @@
       pointer-events:none;
       user-select:none;
     }
+    .wrap{ max-width: 980px; margin: 26px auto; padding: 0 16px 40px; position:relative; z-index:1; }
 
-    .wrap{
-      max-width: 980px;
-      margin: 26px auto;
-      padding: 0 16px 40px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 14px;
-    }
-
-    .brand{
-      display:flex; align-items:center; gap:12px;
-    }
-
+    .topbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 14px; flex-wrap:wrap; }
+    .brand{ display:flex; align-items:center; gap:12px; }
     .logo{
       width:46px; height:46px; border-radius: 14px;
       background: linear-gradient(135deg, rgba(110,168,255,.9), rgba(38,208,124,.75));
@@ -78,17 +57,10 @@
       border:1px solid rgba(255,255,255,.18);
     }
     .logo svg{ width:28px; height:28px; opacity:.95; }
-    .brand h1{
-      font-size: 16px; margin:0;
-      line-height: 1.2;
-    }
-    .brand p{
-      margin: 2px 0 0; font-size: 12px; color: var(--muted);
-    }
+    .brand h1{ font-size: 16px; margin:0; line-height:1.2; }
+    .brand p{ margin:2px 0 0; font-size:12px; color:var(--muted); }
 
-    .tabs{
-      display:flex; gap:10px; flex-wrap: wrap;
-    }
+    .tabs{ display:flex; gap:10px; flex-wrap:wrap; }
     .tabbtn{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.06);
@@ -97,23 +69,13 @@
       border-radius: 12px;
       cursor:pointer;
       font-weight: 800;
-      letter-spacing:.2px;
       transition: .15s ease;
     }
     .tabbtn:hover{ background: rgba(255,255,255,.10); }
-    .tabbtn.active{
-      background: rgba(110,168,255,.22);
-      border-color: rgba(110,168,255,.45);
-    }
+    .tabbtn.active{ background: rgba(110,168,255,.22); border-color: rgba(110,168,255,.45); }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 14px;
-    }
-    @media (max-width: 900px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+    .grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
 
     .card{
       background: var(--card);
@@ -123,25 +85,10 @@
       padding: 16px;
       backdrop-filter: blur(10px);
     }
-    .card h2{
-      margin:0 0 10px;
-      font-size: 16px;
-      letter-spacing:.2px;
-    }
-    .sub{
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: -6px;
-      margin-bottom: 12px;
-    }
+    .card h2{ margin:0 0 10px; font-size: 16px; }
+    .sub{ color: var(--muted); font-size: 12px; margin-top:-6px; margin-bottom: 12px; }
 
-    label{
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      margin: 12px 0 6px;
-    }
-
+    label{ display:block; font-size:12px; color:var(--muted); margin:12px 0 6px; }
     input[type="text"]{
       width:100%;
       padding: 12px 12px;
@@ -151,20 +98,9 @@
       color: var(--text);
       outline: none;
     }
-    input[type="text"]::placeholder{ color: rgba(238,242,255,.45); }
 
-    .q{
-      margin: 14px 0 10px;
-      font-weight: 900;
-      font-size: 15px;
-    }
-
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      align-items:center;
-    }
+    .q{ margin:14px 0 10px; font-weight:900; font-size:15px; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 
     .btn{
       border: 1px solid rgba(255,255,255,.18);
@@ -178,34 +114,17 @@
       user-select:none;
     }
     .btn:hover{ background: rgba(255,255,255,.12); }
-
-    .btn.primary{
-      background: rgba(110,168,255,.24);
-      border-color: rgba(110,168,255,.45);
-    }
-    .btn.good{
-      background: rgba(38,208,124,.20);
-      border-color: rgba(38,208,124,.45);
-    }
-    .btn.bad{
-      background: rgba(255,91,91,.18);
-      border-color: rgba(255,91,91,.45);
-    }
-    .btn:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-    }
+    .btn.good{ background: rgba(38,208,124,.20); border-color: rgba(38,208,124,.45); }
+    .btn.bad{ background: rgba(255,91,91,.18); border-color: rgba(255,91,91,.45); }
+    .btn.accent{ background: rgba(110,168,255,.24); border-color: rgba(110,168,255,.45); }
+    .btn:disabled{ opacity:.45; cursor:not-allowed; }
 
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 10px;
-      border-radius: 999px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px; border-radius: 999px;
       border: 1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.06);
-      font-size: 12px;
-      color: var(--muted);
+      font-size: 12px; color: var(--muted);
     }
 
     .msg{
@@ -214,7 +133,6 @@
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.16);
       background: rgba(0,0,0,.22);
-      color: var(--text);
       line-height:1.35;
     }
     .msg.good{ border-color: rgba(38,208,124,.35); background: rgba(38,208,124,.10); }
@@ -225,52 +143,51 @@
       width:100%;
       border-collapse: collapse;
       margin-top: 12px;
-      overflow:hidden;
       border-radius: 14px;
+      overflow:hidden;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.18);
     }
-    th, td{
-      text-align:left;
-      padding: 10px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      font-size: 13px;
-      vertical-align: top;
-    }
-    th{
-      font-size: 12px;
-      color: var(--muted);
-      background: rgba(255,255,255,.04);
-    }
+    th, td{ text-align:left; padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 13px; }
+    th{ font-size: 12px; color: var(--muted); background: rgba(255,255,255,.04); }
     tr:last-child td{ border-bottom: 0; }
 
-    .rightCard .mini{
-      display:grid;
-      gap:10px;
+    .footerNote{ margin-top: 12px; color: rgba(238,242,255,.60); font-size: 12px; line-height:1.35; }
+
+    /* Modal */
+    .modalOverlay{
+      position: fixed; inset:0; background: rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center;
+      padding: 16px; z-index: 9999;
     }
-    .kpi{
-      padding: 12px 12px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.14);
+    .modal{
+      width: min(560px, 100%);
+      background: rgba(20,24,40,.92);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 18px;
+      box-shadow: 0 28px 80px rgba(0,0,0,.6);
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .modalHeader{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .modalHeader h3{ margin:0; font-size:16px; }
+    .xbtn{
+      border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.06);
+      color: var(--text);
+      width:40px; height:40px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 900;
     }
-    .kpi .k{ color: var(--muted); font-size: 12px; }
-    .kpi .v{ font-size: 18px; font-weight: 900; margin-top: 4px; }
-
-    .footerNote{
-      margin-top: 12px;
-      color: rgba(238,242,255,.60);
-      font-size: 12px;
-      line-height:1.35;
-    }
-
-    .copybox{
-      display:flex;
+    .appGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
       gap:10px;
-      align-items:center;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 12px;
     }
+    @media (max-width: 520px){ .appGrid{ grid-template-columns: 1fr; } }
+
     .code{
       padding: 10px 12px;
       border-radius: 12px;
@@ -279,17 +196,16 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 12px;
       color: rgba(238,242,255,.85);
+      display:inline-block;
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-
     <div class="topbar">
       <div class="brand">
         <div class="logo" aria-label="KMS Warriors CC Logo">
-          <!-- Simple cricket bat/ball icon -->
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M6 18l6-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
             <path d="M11 7l6 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -299,7 +215,7 @@
         </div>
         <div>
           <h1>KMS Warriors CC</h1>
-          <p>Sunday Match • Availability + Fee Collection</p>
+          <p>Sunday Match • Availability + ₹100 Fee</p>
         </div>
       </div>
 
@@ -309,88 +225,66 @@
       </div>
     </div>
 
-    <!-- VOTE VIEW -->
+    <!-- VOTE -->
     <div id="viewVote" class="grid">
       <div class="card">
         <h2>Availability</h2>
-        <div class="sub">Fill your name once. Same device will remember it and block duplicates.</div>
+        <div class="sub">Click Yes → choose a UPI app → pay → confirm UTR. Until then, status stays Pending.</div>
 
         <label>Your Name</label>
         <input type="text" id="name" placeholder="Eg: Muthu" maxlength="40" />
 
         <div class="q">Q: Available for Sunday Match?</div>
         <div class="row">
-          <button class="btn good" id="btnYes" onclick="choose('YES')">Yes (Pay ₹100)</button>
-          <button class="btn bad" id="btnNo" onclick="choose('NO')">No</button>
+          <button class="btn good" id="btnYes" onclick="onYes()">Yes (Pay ₹100)</button>
+          <button class="btn bad" id="btnNo" onclick="onNo()">No</button>
           <span class="pill" id="statusPill">Status: Not submitted</span>
         </div>
 
         <div id="voteMessage" class="msg" style="display:none;"></div>
 
-        <div id="payBox" class="msg warn" style="display:none;">
-          <b>Step 1:</b> Pay ₹100 to <b>mutharasu93@okaxis</b> using any UPI app below.<br>
-          <div class="copybox">
-            <span class="code" id="upiText">mutharasu93@okaxis</span>
-            <button class="btn primary" onclick="copyUPI()">Copy UPI ID</button>
-          </div>
-
+        <div id="utrBox" class="msg warn" style="display:none;">
+          <b>Confirm Payment</b><br>
+          After paying ₹100, enter UTR / Transaction ID:
+          <label style="margin-top:10px;">UTR / Transaction ID</label>
+          <input type="text" id="utr" placeholder="Eg: 123456789012" maxlength="40" />
           <div class="row" style="margin-top:10px;">
-            <!-- These are "best effort" deep-links. Browser cannot confirm installation. -->
-            <button class="btn primary" onclick="openUpi('gpay')">Open Google Pay</button>
-            <button class="btn primary" onclick="openUpi('phonepe')">Open PhonePe</button>
-            <button class="btn primary" onclick="openUpi('paytm')">Open Paytm</button>
-            <button class="btn primary" onclick="openUpi('bhim')">Open BHIM</button>
-            <button class="btn" onclick="openUpi('generic')">Generic UPI</button>
+            <button class="btn accent" onclick="confirmPaid()">Mark as Paid</button>
           </div>
-
-          <div style="margin-top:10px;">
-            <b>Step 2 (Required):</b> After payment, enter UTR / Transaction ID to confirm.
-            <label style="margin-top:10px;">UTR / Transaction ID</label>
-            <input type="text" id="utr" placeholder="Eg: 123456789012 (from your UPI app)" maxlength="40" />
-            <div class="row" style="margin-top:10px;">
-              <button class="btn good" onclick="confirmPaid()">Confirm Paid & Submit</button>
-            </div>
-            <div class="footerNote">
-              Note: This page cannot verify payment automatically without a backend. UTR is used as proof.
-            </div>
+          <div class="footerNote">
+            (Web pages can’t verify UPI payment automatically. UTR is required to mark “YES = Paid”.)
           </div>
         </div>
 
         <div class="footerNote">
-          If buttons open the wrong app (like WhatsApp), use a specific app button above or the “Generic UPI” link.
+          Tip: On Android, the generic <b>upi://pay</b> link usually shows an app chooser. If you have only one UPI app, it opens directly.
         </div>
       </div>
 
-      <div class="card rightCard">
-        <h2>Quick Info</h2>
-        <div class="mini">
-          <div class="kpi">
-            <div class="k">Fee Amount</div>
-            <div class="v">₹100</div>
-          </div>
-          <div class="kpi">
-            <div class="k">UPI ID</div>
-            <div class="v" style="font-size:14px; line-height:1.2;">mutharasu93@okaxis</div>
-          </div>
-          <div class="kpi">
-            <div class="k">Rule</div>
-            <div class="v" style="font-size:14px; line-height:1.25;">
-              “Yes” is counted only after payment confirmation (UTR).
-            </div>
+      <div class="card">
+        <h2>Payment Details</h2>
+        <div class="sub">Use these details in any UPI app.</div>
+        <div class="msg">
+          Amount: <b>₹100</b><br>
+          Pay to (UPI ID): <span class="code">mutharasu93@okaxis</span><br>
+          Note: <b>Sunday Match Fee</b>
+          <div class="row" style="margin-top:10px;">
+            <button class="btn accent" onclick="copyUPI()">Copy UPI ID</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- RESULTS VIEW -->
+    <!-- RESULTS -->
     <div id="viewResults" class="card" style="display:none;">
       <h2>Results</h2>
-      <div class="sub">Stored on this device/browser (localStorage). No reset button provided as requested.</div>
+      <div class="sub">Shows status as Pending until payment is confirmed (UTR).</div>
 
       <div class="row">
         <span class="pill" id="kpiTotal">Total: 0</span>
-        <span class="pill" id="kpiPaidYes">Paid Yes: 0</span>
-        <span class="pill" id="kpiNo">No: 0</span>
+        <span class="pill" id="kpiPaidYes">YES (Paid): 0</span>
+        <span class="pill" id="kpiPending">Pending: 0</span>
+        <span class="pill" id="kpiNo">NO: 0</span>
       </div>
 
       <table>
@@ -398,27 +292,61 @@
           <tr>
             <th>#</th>
             <th>Name</th>
-            <th>Choice</th>
-            <th>Paid</th>
+            <th>Availability</th>
+            <th>Payment</th>
             <th>UTR</th>
-            <th>Time</th>
+            <th>Updated</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
 
       <div class="footerNote">
-        If you need one combined results page for all users (not just this device),
-        tell me and I’ll give you a Google Sheets / Firebase version.
+        Note: This stores results on the same device/browser. If you want a single central results page for everyone, you’ll need a backend (Google Sheets/Firebase).
       </div>
     </div>
+  </div>
 
+  <!-- UPI APP CHOOSER MODAL -->
+  <div class="modalOverlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Select UPI app">
+      <div class="modalHeader">
+        <div>
+          <h3>Select a UPI App</h3>
+          <div class="sub" style="margin:6px 0 0;">
+            Tap any app below — your phone will open the UPI flow (or show app chooser).
+          </div>
+        </div>
+        <button class="xbtn" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="msg warn" style="margin-top:12px;">
+        Pay <b>₹100</b> to <b>mutharasu93@okaxis</b><br>
+        Then come back and enter the <b>UTR</b> to mark your availability as <b>YES</b>.
+      </div>
+
+      <div class="appGrid">
+        <!-- These buttons intentionally use the SAME UPI link.
+             Because from a web page we cannot reliably detect installed apps.
+             On most Android phones, tapping will show the app chooser if multiple apps exist. -->
+        <button class="btn accent" onclick="openUpi()">Google Pay</button>
+        <button class="btn accent" onclick="openUpi()">PhonePe</button>
+        <button class="btn accent" onclick="openUpi()">Paytm</button>
+        <button class="btn accent" onclick="openUpi()">BHIM</button>
+        <button class="btn" onclick="openUpi()">Other UPI App</button>
+        <button class="btn" onclick="copyUpiLink()">Copy UPI Link</button>
+      </div>
+
+      <div class="footerNote" style="margin-top:12px;">
+        If it still opens WhatsApp payment, use “Other UPI App” (same link) or open your preferred UPI app manually and pay using the UPI ID.
+      </div>
+    </div>
   </div>
 
 <script>
-  // ==== CONFIG ====
-  const STORAGE_KEY = "kms_warriors_sunday_poll_v2";
-  const PROFILE_KEY = "kms_warriors_profile_v2";
+  // ===== CONFIG =====
+  const STORAGE_KEY = "kms_warriors_sunday_poll_v3";
+  const DEVICE_KEY  = "kms_warriors_device_id_v1";
 
   const UPI = {
     pa: "mutharasu93@okaxis",
@@ -430,251 +358,231 @@
 
   // ===== Helpers =====
   function nowISO(){ return new Date().toISOString(); }
-  function fmt(iso){
-    try { return new Date(iso).toLocaleString(); } catch(e){ return iso; }
+  function fmt(iso){ try { return new Date(iso).toLocaleString(); } catch(e){ return iso; } }
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[s]));
+  }
+
+  function getDeviceId(){
+    let id = localStorage.getItem(DEVICE_KEY);
+    if(!id){
+      id = "dev_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+      localStorage.setItem(DEVICE_KEY, id);
+    }
+    return id;
   }
 
   function getData(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { entries: [] }; }
     catch(e){ return { entries: [] }; }
   }
-  function setData(data){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
+  function setData(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
 
-  function getProfile(){
-    try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; }
-    catch(e){ return {}; }
-  }
-  function setProfile(p){
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
-  }
-
-  function normalizeName(s){
-    return (s || "").trim().replace(/\s+/g, " ").toLowerCase();
-  }
-
-  function isDuplicate(nameNorm){
+  function findMyEntry(){
+    const did = getDeviceId();
     const data = getData();
-    return data.entries.some(e => e.nameNorm === nameNorm);
+    return data.entries.find(e => e.deviceId === did) || null;
+  }
+
+  function upsertMyEntry(patch){
+    const did = getDeviceId();
+    const data = getData();
+    const idx = data.entries.findIndex(e => e.deviceId === did);
+    if(idx >= 0){
+      data.entries[idx] = { ...data.entries[idx], ...patch, updatedAt: nowISO() };
+    } else {
+      data.entries.push({
+        deviceId: did,
+        name: patch.name || "",
+        availability: patch.availability || "NO",
+        paymentStatus: patch.paymentStatus || "NA", // PAID | PENDING | NA
+        utr: patch.utr || "",
+        createdAt: nowISO(),
+        updatedAt: nowISO()
+      });
+    }
+    setData(data);
   }
 
   function setStatus(text){
     document.getElementById("statusPill").textContent = "Status: " + text;
   }
 
-  function showMsg(elId, text, kind){
-    const el = document.getElementById(elId);
+  function showMsg(text, kind){
+    const el = document.getElementById("voteMessage");
     el.style.display = "block";
     el.className = "msg" + (kind ? (" " + kind) : "");
     el.innerHTML = text;
   }
 
-  function hide(elId){
-    document.getElementById(elId).style.display = "none";
-  }
-
-  // ===== Tabs =====
   function showTab(which){
     const isVote = which === "vote";
     document.getElementById("viewVote").style.display = isVote ? "grid" : "none";
     document.getElementById("viewResults").style.display = isVote ? "none" : "block";
-
     document.getElementById("tabVote").classList.toggle("active", isVote);
     document.getElementById("tabResults").classList.toggle("active", !isVote);
-
     if(!isVote) renderResults();
   }
 
-  // ===== Payment Links =====
+  // ===== UPI link =====
   function buildUpiUrl(){
-    const q = new URLSearchParams({
-      pa: UPI.pa, pn: UPI.pn, am: UPI.am, cu: UPI.cu, tn: UPI.tn
-    });
+    const q = new URLSearchParams({ pa: UPI.pa, pn: UPI.pn, am: UPI.am, cu: UPI.cu, tn: UPI.tn });
     return "upi://pay?" + q.toString();
   }
-
-  // “App-specific” best-effort: these may work on Android Chrome; iOS behavior varies.
-  // If an app isn't installed, it may do nothing or show an error.
-  function openUpi(app){
-    const upiUrl = buildUpiUrl();
-
-    // Android intent URLs (best-effort). Some devices/browsers may still route to other handlers.
-    let url = upiUrl;
-    if(app !== "generic"){
-      // Common package names (can change by vendor/device)
-      const pkgMap = {
-        gpay:   "com.google.android.apps.nbu.paisa.user",
-        phonepe:"com.phonepe.app",
-        paytm:  "net.one97.paytm",
-        bhim:   "in.org.npci.upiapp"
-      };
-      const pkg = pkgMap[app];
-      if(pkg){
-        // Intent forces Android to target a specific package when possible
-        url = `intent://pay?${upiUrl.split("?")[1]}#Intent;scheme=upi;package=${pkg};end`;
-      }
-    }
-
-    window.location.href = url;
+  function openUpi(){
+    // Most reliable from web: open generic UPI link.
+    // Android will usually show an app chooser if multiple UPI apps are installed.
+    window.location.href = buildUpiUrl();
   }
-
   async function copyUPI(){
     try{
       await navigator.clipboard.writeText(UPI.pa);
-      showMsg("voteMessage","Copied UPI ID to clipboard.", "good");
+      showMsg("Copied UPI ID ✅", "good");
     }catch(e){
-      showMsg("voteMessage","Copy failed. Please copy manually: <b>" + UPI.pa + "</b>", "warn");
+      showMsg("Copy failed. Please copy manually: <b>" + escapeHtml(UPI.pa) + "</b>", "warn");
+    }
+  }
+  async function copyUpiLink(){
+    try{
+      await navigator.clipboard.writeText(buildUpiUrl());
+      showMsg("Copied UPI payment link ✅", "good");
+    }catch(e){
+      showMsg("Copy failed. Please try again.", "warn");
     }
   }
 
-  // ===== Voting Flow =====
-  function choose(choice){
+  // ===== Modal =====
+  function openModal(){ document.getElementById("modalOverlay").style.display = "flex"; }
+  function closeModal(){ document.getElementById("modalOverlay").style.display = "none"; }
+
+  // ===== Actions =====
+  function getNameOrWarn(){
     const name = document.getElementById("name").value.trim();
-    const nameNorm = normalizeName(name);
-
     if(!name){
-      showMsg("voteMessage","Please enter your name.", "warn");
+      showMsg("Please enter your name.", "warn");
+      return null;
+    }
+    return name;
+  }
+
+  function onNo(){
+    const name = getNameOrWarn(); if(!name) return;
+
+    // If already YES pending/paid, block switching (optional). Here: allow only if not paid.
+    const mine = findMyEntry();
+    if(mine && mine.availability === "YES" && mine.paymentStatus === "PAID"){
+      showMsg("You already confirmed <b>YES (Paid)</b>. Cannot change to NO.", "warn");
       return;
     }
 
-    // If already submitted from this device, block double entry
-    if(isDuplicate(nameNorm)){
-      const data = getData();
-      const existing = data.entries.find(e => e.nameNorm === nameNorm);
-      setStatus("Already submitted");
-      showMsg("voteMessage",
-        `You already submitted from this device as <b>${existing.name}</b>.<br>` +
-        `Choice: <b>${existing.choice}</b>, Paid: <b>${existing.paid ? "YES" : "NO"}</b>`,
-        "warn"
-      );
-      hide("payBox");
-      lockForm();
+    upsertMyEntry({ name, availability: "NO", paymentStatus: "NA", utr: "" });
+    document.getElementById("utrBox").style.display = "none";
+    setStatus("Submitted (NO)");
+    showMsg("You saved your 100 Rupees ✅", "bad");
+    lockName();
+  }
+
+  function onYes(){
+    const name = getNameOrWarn(); if(!name) return;
+
+    // Create/Update as YES but PENDING until UTR confirmed
+    const mine = findMyEntry();
+    if(mine && mine.availability === "YES" && mine.paymentStatus === "PAID"){
+      setStatus("YES (Paid)");
+      showMsg("Already recorded as <b>YES (Paid)</b> ✅", "good");
+      lockName();
       return;
     }
 
-    // save profile for auto-fill later
-    setProfile({ name, lastChoice: choice });
-
-    if(choice === "NO"){
-      // Direct submit NO (no payment needed)
-      submitEntry({ name, nameNorm, choice: "NO", paid: false, utr: "" });
-      setStatus("Submitted (NO)");
-      showMsg("voteMessage","You saved your 100 Rupees ✅", "bad");
-      hide("payBox");
-      lockForm();
-      return;
-    }
-
-    // YES requires payment confirmation (UTR)
-    setStatus("Payment required");
-    showMsg("voteMessage","Please complete payment and confirm with UTR to count your <b>YES</b>.", "warn");
-    document.getElementById("payBox").style.display = "block";
-    document.getElementById("utr").value = "";
+    upsertMyEntry({ name, availability: "YES", paymentStatus: "PENDING" });
+    setStatus("YES (Pending Payment)");
+    showMsg("Payment required: choose a UPI app, pay ₹100, then enter UTR to confirm.", "warn");
+    document.getElementById("utrBox").style.display = "block";
+    openModal(); // show app list immediately
+    lockName();
   }
 
   function confirmPaid(){
-    const name = document.getElementById("name").value.trim();
-    const nameNorm = normalizeName(name);
-
-    if(!name){
-      showMsg("voteMessage","Please enter your name.", "warn");
+    const mine = findMyEntry();
+    if(!mine || mine.availability !== "YES"){
+      showMsg("Please choose <b>YES</b> first.", "warn");
       return;
     }
-
-    if(isDuplicate(nameNorm)){
-      showMsg("voteMessage","Duplicate entry blocked. You already submitted from this device.", "warn");
-      lockForm();
-      hide("payBox");
-      return;
-    }
-
     const utr = document.getElementById("utr").value.trim();
     if(!utr || utr.length < 6){
-      showMsg("voteMessage","Please enter a valid UTR / Transaction ID (at least 6 characters).", "warn");
+      showMsg("Enter a valid UTR / Transaction ID (min 6 chars).", "warn");
       return;
     }
-
-    submitEntry({ name, nameNorm, choice: "YES", paid: true, utr });
-    setStatus("Submitted (YES - Paid)");
-    showMsg("voteMessage","Payment confirmed ✅ Your <b>YES</b> has been recorded.", "good");
-    hide("payBox");
-    lockForm();
+    upsertMyEntry({ availability: "YES", paymentStatus: "PAID", utr });
+    setStatus("YES (Paid)");
+    showMsg("Payment confirmed ✅ Availability marked as <b>YES</b>.", "good");
+    closeModal();
   }
 
-  function submitEntry(entry){
-    const data = getData();
-    data.entries.push({ ...entry, ts: nowISO() });
-    setData(data);
-  }
-
-  function lockForm(){
+  function lockName(){
+    // Prevent changing identity mid-way. You can remove this if you want.
     document.getElementById("name").disabled = true;
-    document.getElementById("btnYes").disabled = true;
-    document.getElementById("btnNo").disabled = true;
-  }
-
-  function hydrateFromProfile(){
-    const p = getProfile();
-    if(p && p.name){
-      document.getElementById("name").value = p.name;
-    }
-
-    // If already submitted, lock immediately
-    const nameNorm = normalizeName(document.getElementById("name").value);
-    if(nameNorm && isDuplicate(nameNorm)){
-      const data = getData();
-      const existing = data.entries.find(e => e.nameNorm === nameNorm);
-      setStatus("Already submitted");
-      showMsg("voteMessage",
-        `Already submitted from this device as <b>${existing.name}</b>.<br>` +
-        `Choice: <b>${existing.choice}</b>, Paid: <b>${existing.paid ? "YES" : "NO"}</b>`,
-        "warn"
-      );
-      hide("payBox");
-      lockForm();
-    }
   }
 
   // ===== Results =====
   function renderResults(){
     const data = getData();
-    const entries = data.entries.slice().sort((a,b)=> (a.ts < b.ts ? 1 : -1));
+    const entries = data.entries.slice().sort((a,b)=> (a.updatedAt < b.updatedAt ? 1 : -1));
 
-    const paidYes = entries.filter(e => e.choice === "YES" && e.paid).length;
-    const no = entries.filter(e => e.choice === "NO").length;
-    const total = entries.length;
+    const yesPaid = entries.filter(e => e.availability === "YES" && e.paymentStatus === "PAID").length;
+    const yesPending = entries.filter(e => e.availability === "YES" && e.paymentStatus === "PENDING").length;
+    const no = entries.filter(e => e.availability === "NO").length;
 
-    document.getElementById("kpiTotal").textContent = `Total: ${total}`;
-    document.getElementById("kpiPaidYes").textContent = `Paid Yes: ${paidYes}`;
-    document.getElementById("kpiNo").textContent = `No: ${no}`;
+    document.getElementById("kpiTotal").textContent = `Total: ${entries.length}`;
+    document.getElementById("kpiPaidYes").textContent = `YES (Paid): ${yesPaid}`;
+    document.getElementById("kpiPending").textContent = `Pending: ${yesPending}`;
+    document.getElementById("kpiNo").textContent = `NO: ${no}`;
 
     const tbody = document.getElementById("rows");
     tbody.innerHTML = "";
-
     entries.forEach((e, idx)=>{
+      const avail = e.availability === "YES"
+        ? (e.paymentStatus === "PAID" ? "YES" : "YES")
+        : "NO";
+      const pay = e.availability === "YES"
+        ? (e.paymentStatus === "PAID" ? "PAID" : "PENDING")
+        : "NA";
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${idx+1}</td>
-        <td><b>${escapeHtml(e.name)}</b></td>
-        <td>${e.choice}</td>
-        <td>${e.paid ? "YES" : "NO"}</td>
+        <td><b>${escapeHtml(e.name || "-")}</b></td>
+        <td>${avail}</td>
+        <td>${pay}</td>
         <td>${e.utr ? escapeHtml(e.utr) : "-"}</td>
-        <td>${fmt(e.ts)}</td>
+        <td>${fmt(e.updatedAt)}</td>
       `;
       tbody.appendChild(tr);
     });
   }
 
-  // basic XSS safety for names/UTR in table
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, s => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-    }[s]));
-  }
+  // ===== Init: restore state for same device =====
+  (function init(){
+    const mine = findMyEntry();
+    if(mine){
+      document.getElementById("name").value = mine.name || "";
+      lockName();
 
-  // Init
-  hydrateFromProfile();
+      if(mine.availability === "NO"){
+        setStatus("Submitted (NO)");
+        showMsg("Already submitted as <b>NO</b>.", "bad");
+        document.getElementById("utrBox").style.display = "none";
+      } else if(mine.availability === "YES" && mine.paymentStatus === "PENDING"){
+        setStatus("YES (Pending Payment)");
+        showMsg("You have a <b>pending</b> YES. Please pay and enter UTR to confirm.", "warn");
+        document.getElementById("utrBox").style.display = "block";
+      } else if(mine.availability === "YES" && mine.paymentStatus === "PAID"){
+        setStatus("YES (Paid)");
+        showMsg("Already confirmed as <b>YES (Paid)</b> ✅", "good");
+        document.getElementById("utrBox").style.display = "none";
+      }
+    }
+  })();
 </script>
 </body>
 </html>
