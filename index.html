@@ -1,102 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Office</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        nav {
-            background-color: #0056b3;
-            padding: 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        section {
-            padding: 40px 20px;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        .contact-form input, 
-        .contact-form textarea {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-        }
-        .contact-form button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .contact-form button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>Welcome to My Office</h1>
-        <p>Your trusted partner in business solutions</p>
-    </header>
-
-    <nav>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <section id="about">
-        <h2>About Us</h2>
-        <p>We are a professional office providing top-notch business solutions for companies of all sizes. Our team of experts is dedicated to delivering quality and efficiency.</p>
-    </section>
-
-    <section id="services">
-        <h2>Our Services</h2>
-        <ul>
-            <li>Business Consulting</li>
-            <li>Project Management</li>
-            <li>Software Development</li>
-            <li>Customer Support Solutions</li>
-        </ul>
-    </section>
-
-    <section id="contact">
-        <h2>Contact Us</h2>
-        <form class="contact-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; 2025 My Office. All rights reserved.</p>
-    </footer>
-
-</body>
-</html>
+  CASE
+        WHEN COUNT(t."Request Id") <
+             (
+                SELECT AVG(x.m_cnt)
+                FROM (
+                    SELECT COUNT(pm."Request Id") AS m_cnt
+                    FROM "table a" pm
+                    WHERE
+                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -1, GETDATE())) AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -1, GETDATE())))
+                        OR (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -2, GETDATE())) AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -2, GETDATE())))
+                        OR (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -3, GETDATE())) AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -3, GETDATE())))
+                    GROUP BY YEAR(pm."Created Time"), MONTH(pm."Created Time")
+                ) x
+             )
+        THEN 'RED'
+        ELSE 'OK'
+    END AS "Tickets_Flag"
+    
+    
+     CASE
+        WHEN COUNT(t."Request Id") <
+             (
+                SELECT AVG(x.m_cnt)
+                FROM (
+                    SELECT COUNT(pm."Request Id") AS m_cnt
+                    FROM "qTech" pm
+                    WHERE
+                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -1, GETDATE()))
+                         AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -1, GETDATE())) AND pm."ValidEmailTicketStatus" = 'Valid Email Tickets')
+                        OR
+                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -2, GETDATE()))
+                         AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -2, GETDATE()))AND pm."ValidEmailTicketStatus" = 'Valid Email Tickets')
+                        OR
+                        (YEAR(pm."Created Time") = YEAR(DATEADD(MONTH, -3, GETDATE()))
+                         AND MONTH(pm."Created Time") = MONTH(DATEADD(MONTH, -3, GETDATE()))AND pm."ValidEmailTicketStatus" = 'Valid Email Tickets')
+                    GROUP BY YEAR(pm."Created Time"), MONTH(pm."Created Time")
+                ) x
+          )
+        THEN 'RED'
+        ELSE 'OK'
+    END AS "Tickets_Flag"
