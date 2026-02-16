@@ -3,178 +3,678 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sunday Match Availability</title>
+  <title>KMS Warriors CC | Sunday Match</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background:#f6f7fb; color:#111; }
-    .wrap { max-width: 720px; margin: 28px auto; padding: 0 16px; }
-    .card { background:#fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 18px rgba(0,0,0,.07); }
-    .tabs { display:flex; gap:10px; margin-bottom: 12px; }
-    .tabbtn {
-      border: 0; padding: 10px 14px; border-radius: 10px; cursor:pointer;
-      background:#e9ecf7; font-weight: 600;
+    :root{
+      --bg:#0b1020;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.12);
+      --text:#eef2ff;
+      --muted: rgba(238,242,255,.75);
+      --accent:#6ea8ff;
+      --good:#26d07c;
+      --bad:#ff5b5b;
+      --warn:#ffcc66;
+      --border: rgba(255,255,255,.14);
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
     }
-    .tabbtn.active { background:#2f5cff; color:#fff; }
-    h1 { font-size: 18px; margin: 0 0 14px; }
-    .q { font-size: 16px; font-weight: 700; margin: 12px 0 10px; }
-    .options { display:flex; gap:12px; flex-wrap: wrap; }
-    .btn {
-      border: 0; padding: 10px 14px; border-radius: 10px; cursor:pointer;
-      background:#111; color:#fff; font-weight:700;
+
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(110,168,255,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(38,208,124,.14), transparent 55%),
+                  radial-gradient(900px 500px at 60% 100%, rgba(255,204,102,.12), transparent 50%),
+                  var(--bg);
+      color: var(--text);
+      min-height:100vh;
+      position: relative;
+      overflow-x:hidden;
     }
-    .btn.secondary { background:#666; }
-    .msg { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background:#f1f5ff; }
-    .small { font-size: 12px; color:#666; margin-top: 10px; }
-    table { width:100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border-bottom: 1px solid #eee; padding: 10px 8px; text-align:left; }
-    th { background:#fafafa; font-size: 13px; }
-    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
-    .danger { background:#ffefef; }
-    .linkbtn {
-      display:inline-block; margin-top: 10px; padding: 10px 14px; border-radius: 10px;
-      background:#2f5cff; color:#fff; text-decoration:none; font-weight:700;
+
+    /* Watermark background text */
+    body::before{
+      content:"KMS WARRIORS CC  •  KMS WARRIORS CC  •  KMS WARRIORS CC";
+      position: fixed;
+      inset: 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: rgba(255,255,255,.05);
+      transform: rotate(-18deg);
+      white-space: nowrap;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 26px auto;
+      padding: 0 16px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 14px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+
+    .logo{
+      width:46px; height:46px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(110,168,255,.9), rgba(38,208,124,.75));
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .logo svg{ width:28px; height:28px; opacity:.95; }
+    .brand h1{
+      font-size: 16px; margin:0;
+      line-height: 1.2;
+    }
+    .brand p{
+      margin: 2px 0 0; font-size: 12px; color: var(--muted);
+    }
+
+    .tabs{
+      display:flex; gap:10px; flex-wrap: wrap;
+    }
+    .tabbtn{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 800;
+      letter-spacing:.2px;
+      transition: .15s ease;
+    }
+    .tabbtn:hover{ background: rgba(255,255,255,.10); }
+    .tabbtn.active{
+      background: rgba(110,168,255,.22);
+      border-color: rgba(110,168,255,.45);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size: 16px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: -6px;
+      margin-bottom: 12px;
+    }
+
+    label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 12px 0 6px;
+    }
+
+    input[type="text"]{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline: none;
+    }
+    input[type="text"]::placeholder{ color: rgba(238,242,255,.45); }
+
+    .q{
+      margin: 14px 0 10px;
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor:pointer;
+      transition:.15s ease;
+      user-select:none;
+    }
+    .btn:hover{ background: rgba(255,255,255,.12); }
+
+    .btn.primary{
+      background: rgba(110,168,255,.24);
+      border-color: rgba(110,168,255,.45);
+    }
+    .btn.good{
+      background: rgba(38,208,124,.20);
+      border-color: rgba(38,208,124,.45);
+    }
+    .btn.bad{
+      background: rgba(255,91,91,.18);
+      border-color: rgba(255,91,91,.45);
+    }
+    .btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .msg{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      line-height:1.35;
+    }
+    .msg.good{ border-color: rgba(38,208,124,.35); background: rgba(38,208,124,.10); }
+    .msg.bad{ border-color: rgba(255,91,91,.35); background: rgba(255,91,91,.10); }
+    .msg.warn{ border-color: rgba(255,204,102,.40); background: rgba(255,204,102,.10); }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    th, td{
+      text-align:left;
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 13px;
+      vertical-align: top;
+    }
+    th{
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+    }
+    tr:last-child td{ border-bottom: 0; }
+
+    .rightCard .mini{
+      display:grid;
+      gap:10px;
+    }
+    .kpi{
+      padding: 12px 12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+    }
+    .kpi .k{ color: var(--muted); font-size: 12px; }
+    .kpi .v{ font-size: 18px; font-weight: 900; margin-top: 4px; }
+
+    .footerNote{
+      margin-top: 12px;
+      color: rgba(238,242,255,.60);
+      font-size: 12px;
+      line-height:1.35;
+    }
+
+    .copybox{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .code{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px dashed rgba(255,255,255,.22);
+      background: rgba(0,0,0,.18);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      color: rgba(238,242,255,.85);
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="tabs">
-      <button class="tabbtn active" id="tabVote" onclick="showTab('vote')">Vote</button>
-      <button class="tabbtn" id="tabResults" onclick="showTab('results')">Results</button>
-    </div>
 
-    <div class="card" id="viewVote">
-      <h1>Sunday Match Poll</h1>
-      <div class="q">Q: Available for Sunday Match?</div>
-
-      <div class="options">
-        <button class="btn" onclick="vote('YES')">Yes</button>
-        <button class="btn secondary" onclick="vote('NO')">No</button>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-label="KMS Warriors CC Logo">
+          <!-- Simple cricket bat/ball icon -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M6 18l6-6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M11 7l6 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14 6c1.5-1.5 4-1.5 5.5 0s1.5 4 0 5.5L12 19c-1.5 1.5-4 1.5-5.5 0s-1.5-4 0-5.5L14 6z"
+                  stroke="white" stroke-width="2" stroke-linejoin="round" opacity=".9"/>
+          </svg>
+        </div>
+        <div>
+          <h1>KMS Warriors CC</h1>
+          <p>Sunday Match • Availability + Fee Collection</p>
+        </div>
       </div>
 
-      <div id="message" class="msg" style="display:none;"></div>
-
-      <div class="small">
-        Note: Payment redirect uses a UPI deep link (works best on mobile with GPay/UPI apps installed).
+      <div class="tabs">
+        <button class="tabbtn active" id="tabVote" onclick="showTab('vote')">Vote</button>
+        <button class="tabbtn" id="tabResults" onclick="showTab('results')">Results</button>
       </div>
     </div>
 
-    <div class="card" id="viewResults" style="display:none;">
-      <h1>Results</h1>
+    <!-- VOTE VIEW -->
+    <div id="viewVote" class="grid">
+      <div class="card">
+        <h2>Availability</h2>
+        <div class="sub">Fill your name once. Same device will remember it and block duplicates.</div>
+
+        <label>Your Name</label>
+        <input type="text" id="name" placeholder="Eg: Muthu" maxlength="40" />
+
+        <div class="q">Q: Available for Sunday Match?</div>
+        <div class="row">
+          <button class="btn good" id="btnYes" onclick="choose('YES')">Yes (Pay ₹100)</button>
+          <button class="btn bad" id="btnNo" onclick="choose('NO')">No</button>
+          <span class="pill" id="statusPill">Status: Not submitted</span>
+        </div>
+
+        <div id="voteMessage" class="msg" style="display:none;"></div>
+
+        <div id="payBox" class="msg warn" style="display:none;">
+          <b>Step 1:</b> Pay ₹100 to <b>mutharasu93@okaxis</b> using any UPI app below.<br>
+          <div class="copybox">
+            <span class="code" id="upiText">mutharasu93@okaxis</span>
+            <button class="btn primary" onclick="copyUPI()">Copy UPI ID</button>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <!-- These are "best effort" deep-links. Browser cannot confirm installation. -->
+            <button class="btn primary" onclick="openUpi('gpay')">Open Google Pay</button>
+            <button class="btn primary" onclick="openUpi('phonepe')">Open PhonePe</button>
+            <button class="btn primary" onclick="openUpi('paytm')">Open Paytm</button>
+            <button class="btn primary" onclick="openUpi('bhim')">Open BHIM</button>
+            <button class="btn" onclick="openUpi('generic')">Generic UPI</button>
+          </div>
+
+          <div style="margin-top:10px;">
+            <b>Step 2 (Required):</b> After payment, enter UTR / Transaction ID to confirm.
+            <label style="margin-top:10px;">UTR / Transaction ID</label>
+            <input type="text" id="utr" placeholder="Eg: 123456789012 (from your UPI app)" maxlength="40" />
+            <div class="row" style="margin-top:10px;">
+              <button class="btn good" onclick="confirmPaid()">Confirm Paid & Submit</button>
+            </div>
+            <div class="footerNote">
+              Note: This page cannot verify payment automatically without a backend. UTR is used as proof.
+            </div>
+          </div>
+        </div>
+
+        <div class="footerNote">
+          If buttons open the wrong app (like WhatsApp), use a specific app button above or the “Generic UPI” link.
+        </div>
+      </div>
+
+      <div class="card rightCard">
+        <h2>Quick Info</h2>
+        <div class="mini">
+          <div class="kpi">
+            <div class="k">Fee Amount</div>
+            <div class="v">₹100</div>
+          </div>
+          <div class="kpi">
+            <div class="k">UPI ID</div>
+            <div class="v" style="font-size:14px; line-height:1.2;">mutharasu93@okaxis</div>
+          </div>
+          <div class="kpi">
+            <div class="k">Rule</div>
+            <div class="v" style="font-size:14px; line-height:1.25;">
+              “Yes” is counted only after payment confirmation (UTR).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS VIEW -->
+    <div id="viewResults" class="card" style="display:none;">
+      <h2>Results</h2>
+      <div class="sub">Stored on this device/browser (localStorage). No reset button provided as requested.</div>
 
       <div class="row">
-        <button class="btn secondary" onclick="refreshResults()">Refresh</button>
-        <button class="btn secondary" onclick="resetLocalResults()">Reset (this device)</button>
+        <span class="pill" id="kpiTotal">Total: 0</span>
+        <span class="pill" id="kpiPaidYes">Paid Yes: 0</span>
+        <span class="pill" id="kpiNo">No: 0</span>
       </div>
-
-      <div id="summary" class="msg" style="margin-top:12px;"></div>
 
       <table>
         <thead>
           <tr>
             <th>#</th>
+            <th>Name</th>
             <th>Choice</th>
+            <th>Paid</th>
+            <th>UTR</th>
             <th>Time</th>
           </tr>
         </thead>
-        <tbody id="logBody"></tbody>
+        <tbody id="rows"></tbody>
       </table>
 
-      <div class="small danger msg">
-        This “Results” tab shows votes saved only in this browser/device (localStorage).  
-        If you want to collect votes from all users in one place, you need a backend (Google Sheet / Firebase / server).
+      <div class="footerNote">
+        If you need one combined results page for all users (not just this device),
+        tell me and I’ll give you a Google Sheets / Firebase version.
       </div>
     </div>
+
   </div>
 
-  <script>
-    const STORAGE_KEY = "sunday_match_votes_v1";
+<script>
+  // ==== CONFIG ====
+  const STORAGE_KEY = "kms_warriors_sunday_poll_v2";
+  const PROFILE_KEY = "kms_warriors_profile_v2";
 
-    function showTab(which) {
-      const isVote = which === "vote";
-      document.getElementById("viewVote").style.display = isVote ? "block" : "none";
-      document.getElementById("viewResults").style.display = isVote ? "none" : "block";
+  const UPI = {
+    pa: "mutharasu93@okaxis",
+    pn: "KMS Warriors CC",
+    am: "100",
+    cu: "INR",
+    tn: "Sunday Match Fee"
+  };
 
-      document.getElementById("tabVote").classList.toggle("active", isVote);
-      document.getElementById("tabResults").classList.toggle("active", !isVote);
+  // ===== Helpers =====
+  function nowISO(){ return new Date().toISOString(); }
+  function fmt(iso){
+    try { return new Date(iso).toLocaleString(); } catch(e){ return iso; }
+  }
 
-      if (!isVote) refreshResults();
-    }
+  function getData(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { entries: [] }; }
+    catch(e){ return { entries: [] }; }
+  }
+  function setData(data){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
 
-    function getVotes() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (e) {
-        return [];
+  function getProfile(){
+    try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function setProfile(p){
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+  }
+
+  function normalizeName(s){
+    return (s || "").trim().replace(/\s+/g, " ").toLowerCase();
+  }
+
+  function isDuplicate(nameNorm){
+    const data = getData();
+    return data.entries.some(e => e.nameNorm === nameNorm);
+  }
+
+  function setStatus(text){
+    document.getElementById("statusPill").textContent = "Status: " + text;
+  }
+
+  function showMsg(elId, text, kind){
+    const el = document.getElementById(elId);
+    el.style.display = "block";
+    el.className = "msg" + (kind ? (" " + kind) : "");
+    el.innerHTML = text;
+  }
+
+  function hide(elId){
+    document.getElementById(elId).style.display = "none";
+  }
+
+  // ===== Tabs =====
+  function showTab(which){
+    const isVote = which === "vote";
+    document.getElementById("viewVote").style.display = isVote ? "grid" : "none";
+    document.getElementById("viewResults").style.display = isVote ? "none" : "block";
+
+    document.getElementById("tabVote").classList.toggle("active", isVote);
+    document.getElementById("tabResults").classList.toggle("active", !isVote);
+
+    if(!isVote) renderResults();
+  }
+
+  // ===== Payment Links =====
+  function buildUpiUrl(){
+    const q = new URLSearchParams({
+      pa: UPI.pa, pn: UPI.pn, am: UPI.am, cu: UPI.cu, tn: UPI.tn
+    });
+    return "upi://pay?" + q.toString();
+  }
+
+  // “App-specific” best-effort: these may work on Android Chrome; iOS behavior varies.
+  // If an app isn't installed, it may do nothing or show an error.
+  function openUpi(app){
+    const upiUrl = buildUpiUrl();
+
+    // Android intent URLs (best-effort). Some devices/browsers may still route to other handlers.
+    let url = upiUrl;
+    if(app !== "generic"){
+      // Common package names (can change by vendor/device)
+      const pkgMap = {
+        gpay:   "com.google.android.apps.nbu.paisa.user",
+        phonepe:"com.phonepe.app",
+        paytm:  "net.one97.paytm",
+        bhim:   "in.org.npci.upiapp"
+      };
+      const pkg = pkgMap[app];
+      if(pkg){
+        // Intent forces Android to target a specific package when possible
+        url = `intent://pay?${upiUrl.split("?")[1]}#Intent;scheme=upi;package=${pkg};end`;
       }
     }
 
-    function saveVotes(votes) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+    window.location.href = url;
+  }
+
+  async function copyUPI(){
+    try{
+      await navigator.clipboard.writeText(UPI.pa);
+      showMsg("voteMessage","Copied UPI ID to clipboard.", "good");
+    }catch(e){
+      showMsg("voteMessage","Copy failed. Please copy manually: <b>" + UPI.pa + "</b>", "warn");
+    }
+  }
+
+  // ===== Voting Flow =====
+  function choose(choice){
+    const name = document.getElementById("name").value.trim();
+    const nameNorm = normalizeName(name);
+
+    if(!name){
+      showMsg("voteMessage","Please enter your name.", "warn");
+      return;
     }
 
-    function vote(choice) {
-      const votes = getVotes();
-      votes.push({ choice, ts: new Date().toISOString() });
-      saveVotes(votes);
-
-      const msg = document.getElementById("message");
-      msg.style.display = "block";
-
-      if (choice === "NO") {
-        msg.textContent = "You saved your 100 Rupees";
-        return;
-      }
-
-      // YES -> Redirect to GPay/UPI payment link for ₹100 to mutharasu93@okaxis
-      // This is a standard UPI deep link. On mobile, it usually opens the chosen UPI app.
-      const upiId = "mutharasu93@okaxis";
-      const amount = "100";
-      const payeeName = "Sunday Match";
-      const note = "Sunday Match Fee";
-
-      const upiUrl =
-        "upi://pay" +
-        "?pa=" + encodeURIComponent(upiId) +
-        "&pn=" + encodeURIComponent(payeeName) +
-        "&am=" + encodeURIComponent(amount) +
-        "&cu=INR" +
-        "&tn=" + encodeURIComponent(note);
-
-      msg.innerHTML = "Redirecting to payment… If it doesn’t open, tap: <br>" +
-                      `<a class="linkbtn" href="${upiUrl}">Pay ₹100 via UPI</a>`;
-
-      // Try redirect
-      setTimeout(() => { window.location.href = upiUrl; }, 500);
+    // If already submitted from this device, block double entry
+    if(isDuplicate(nameNorm)){
+      const data = getData();
+      const existing = data.entries.find(e => e.nameNorm === nameNorm);
+      setStatus("Already submitted");
+      showMsg("voteMessage",
+        `You already submitted from this device as <b>${existing.name}</b>.<br>` +
+        `Choice: <b>${existing.choice}</b>, Paid: <b>${existing.paid ? "YES" : "NO"}</b>`,
+        "warn"
+      );
+      hide("payBox");
+      lockForm();
+      return;
     }
 
-    function refreshResults() {
-      const votes = getVotes();
-      const yesCount = votes.filter(v => v.choice === "YES").length;
-      const noCount  = votes.filter(v => v.choice === "NO").length;
+    // save profile for auto-fill later
+    setProfile({ name, lastChoice: choice });
 
-      document.getElementById("summary").innerHTML =
-        `<b>Total:</b> ${votes.length} &nbsp; | &nbsp; <b>Yes:</b> ${yesCount} &nbsp; | &nbsp; <b>No:</b> ${noCount}`;
-
-      const tbody = document.getElementById("logBody");
-      tbody.innerHTML = "";
-
-      votes.slice().reverse().forEach((v, idx) => {
-        const tr = document.createElement("tr");
-        const dt = new Date(v.ts);
-        tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td><b>${v.choice}</b></td>
-          <td>${dt.toLocaleString()}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+    if(choice === "NO"){
+      // Direct submit NO (no payment needed)
+      submitEntry({ name, nameNorm, choice: "NO", paid: false, utr: "" });
+      setStatus("Submitted (NO)");
+      showMsg("voteMessage","You saved your 100 Rupees ✅", "bad");
+      hide("payBox");
+      lockForm();
+      return;
     }
 
-    function resetLocalResults() {
-      localStorage.removeItem(STORAGE_KEY);
-      refreshResults();
-      alert("Local results cleared for this device/browser.");
+    // YES requires payment confirmation (UTR)
+    setStatus("Payment required");
+    showMsg("voteMessage","Please complete payment and confirm with UTR to count your <b>YES</b>.", "warn");
+    document.getElementById("payBox").style.display = "block";
+    document.getElementById("utr").value = "";
+  }
+
+  function confirmPaid(){
+    const name = document.getElementById("name").value.trim();
+    const nameNorm = normalizeName(name);
+
+    if(!name){
+      showMsg("voteMessage","Please enter your name.", "warn");
+      return;
     }
-  </script>
+
+    if(isDuplicate(nameNorm)){
+      showMsg("voteMessage","Duplicate entry blocked. You already submitted from this device.", "warn");
+      lockForm();
+      hide("payBox");
+      return;
+    }
+
+    const utr = document.getElementById("utr").value.trim();
+    if(!utr || utr.length < 6){
+      showMsg("voteMessage","Please enter a valid UTR / Transaction ID (at least 6 characters).", "warn");
+      return;
+    }
+
+    submitEntry({ name, nameNorm, choice: "YES", paid: true, utr });
+    setStatus("Submitted (YES - Paid)");
+    showMsg("voteMessage","Payment confirmed ✅ Your <b>YES</b> has been recorded.", "good");
+    hide("payBox");
+    lockForm();
+  }
+
+  function submitEntry(entry){
+    const data = getData();
+    data.entries.push({ ...entry, ts: nowISO() });
+    setData(data);
+  }
+
+  function lockForm(){
+    document.getElementById("name").disabled = true;
+    document.getElementById("btnYes").disabled = true;
+    document.getElementById("btnNo").disabled = true;
+  }
+
+  function hydrateFromProfile(){
+    const p = getProfile();
+    if(p && p.name){
+      document.getElementById("name").value = p.name;
+    }
+
+    // If already submitted, lock immediately
+    const nameNorm = normalizeName(document.getElementById("name").value);
+    if(nameNorm && isDuplicate(nameNorm)){
+      const data = getData();
+      const existing = data.entries.find(e => e.nameNorm === nameNorm);
+      setStatus("Already submitted");
+      showMsg("voteMessage",
+        `Already submitted from this device as <b>${existing.name}</b>.<br>` +
+        `Choice: <b>${existing.choice}</b>, Paid: <b>${existing.paid ? "YES" : "NO"}</b>`,
+        "warn"
+      );
+      hide("payBox");
+      lockForm();
+    }
+  }
+
+  // ===== Results =====
+  function renderResults(){
+    const data = getData();
+    const entries = data.entries.slice().sort((a,b)=> (a.ts < b.ts ? 1 : -1));
+
+    const paidYes = entries.filter(e => e.choice === "YES" && e.paid).length;
+    const no = entries.filter(e => e.choice === "NO").length;
+    const total = entries.length;
+
+    document.getElementById("kpiTotal").textContent = `Total: ${total}`;
+    document.getElementById("kpiPaidYes").textContent = `Paid Yes: ${paidYes}`;
+    document.getElementById("kpiNo").textContent = `No: ${no}`;
+
+    const tbody = document.getElementById("rows");
+    tbody.innerHTML = "";
+
+    entries.forEach((e, idx)=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${idx+1}</td>
+        <td><b>${escapeHtml(e.name)}</b></td>
+        <td>${e.choice}</td>
+        <td>${e.paid ? "YES" : "NO"}</td>
+        <td>${e.utr ? escapeHtml(e.utr) : "-"}</td>
+        <td>${fmt(e.ts)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // basic XSS safety for names/UTR in table
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+    }[s]));
+  }
+
+  // Init
+  hydrateFromProfile();
+</script>
 </body>
 </html>
